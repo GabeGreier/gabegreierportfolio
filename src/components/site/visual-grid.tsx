@@ -1,13 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import type { Visual } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 export function VisualGrid({ visuals, limit }: { visuals: Visual[]; limit?: number }) {
-  const [activeVisual, setActiveVisual] = useState<Visual | null>(null);
   const items = typeof limit === "number" ? visuals.slice(0, limit) : visuals;
 
   return (
@@ -22,7 +20,6 @@ export function VisualGrid({ visuals, limit }: { visuals: Visual[]; limit?: numb
                   "group relative aspect-[4/5] overflow-hidden rounded-lg border border-border/60 bg-card",
                   index % 5 === 0 && "sm:col-span-2 sm:aspect-[9/5]"
                 )}
-                onClick={() => setActiveVisual(visual)}
               >
                 <Image
                   src={visual.thumbnail_url ?? visual.image_url}
@@ -38,11 +35,9 @@ export function VisualGrid({ visuals, limit }: { visuals: Visual[]; limit?: numb
               </button>
             </DialogTrigger>
             <DialogContent className="p-0">
-              {activeVisual ? (
-                <div className="relative aspect-[16/10] w-full">
-                  <Image src={activeVisual.image_url} alt={activeVisual.title} fill className="object-contain" sizes="95vw" />
-                </div>
-              ) : null}
+              <div className="relative aspect-[16/10] w-full">
+                <Image src={visual.image_url} alt={visual.title} fill className="object-contain" sizes="95vw" />
+              </div>
             </DialogContent>
           </Dialog>
         ))}
