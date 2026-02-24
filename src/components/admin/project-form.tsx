@@ -29,7 +29,7 @@ export function ProjectForm({
       : "");
 
   return (
-    <form action={action} className="space-y-6 rounded-xl border border-border/70 bg-card/70 p-6" encType="multipart/form-data">
+    <form action={action} className="space-y-6 rounded-xl border border-border/70 bg-card/70 p-6">
       {initialValues?.id ? <Input type="hidden" name="id" defaultValue={initialValues.id} /> : null}
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2 md:col-span-2">

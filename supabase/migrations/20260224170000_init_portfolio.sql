@@ -203,5 +203,5 @@ using (
 );
 
 insert into public.admin_emails (email)
-values ('your-email@example.com')
+values ('gabegreier@gmail.com')
 on conflict (email) do nothing;
