@@ -40,7 +40,7 @@ export default async function VisualsPage({ searchParams }: Props) {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <SectionHeading eyebrow="Automotive Photography" title="Visuals" />
         <Button asChild variant="outline" className="border-primary/35 text-primary hover:bg-primary/10">
-          <Link href="https://instagram.com/gabrielgreier" target="_blank" rel="noreferrer">
+          <Link href="https://instagram.com/gabrielgreier/" target="_blank" rel="noreferrer">
             View Instagram
           </Link>
         </Button>
