@@ -3,7 +3,6 @@
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { isAdminEmail } from "@/lib/auth";
 import { slugify } from "@/lib/utils";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
@@ -111,6 +110,16 @@ function getErrorMessage(error: unknown) {
     return error.message;
   }
   return "Unexpected error";
+}
+
+function isNextRedirect(error: unknown) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "digest" in error &&
+    typeof (error as { digest?: unknown }).digest === "string" &&
+    (error as { digest: string }).digest.startsWith("NEXT_REDIRECT")
+  );
 }
 
 export async function signInAction(formData: FormData) {
@@ -281,19 +290,8 @@ export async function deleteProjectAction(formData: FormData) {
 export async function createVisualAction(formData: FormData) {
   try {
     const supabase = await requireAdminSupabase();
-
-    const imageFile = formData.get("image_file");
-    const thumbnailFile = formData.get("thumbnail_file");
-    const uploadedImage =
-      imageFile instanceof File ? await uploadImage(supabase, "visuals", imageFile, "display") : null;
-    const uploadedThumbnail =
-      thumbnailFile instanceof File && thumbnailFile.size > 0
-        ? await uploadImage(supabase, "visuals", thumbnailFile, "thumbs")
-        : null;
-
-    const imageUrl = uploadedImage || String(formData.get("image_url") ?? "").trim();
-    const thumbnailUrl =
-      uploadedThumbnail || String(formData.get("thumbnail_url") ?? "").trim() || imageUrl || null;
+    const imageUrl = String(formData.get("image_url") ?? "").trim();
+    const thumbnailUrl = String(formData.get("thumbnail_url") ?? "").trim() || imageUrl || null;
 
     const payload = {
       title: String(formData.get("title") ?? "").trim(),
@@ -317,7 +315,7 @@ export async function createVisualAction(formData: FormData) {
     revalidatePath("/admin/visuals");
     redirect("/admin/visuals?success=created");
   } catch (error) {
-    if (isRedirectError(error)) {
+    if (isNextRedirect(error)) {
       throw error;
     }
     redirect(`/admin/visuals?error=${encodeURIComponent(getErrorMessage(error))}`);
@@ -329,21 +327,8 @@ export async function updateVisualAction(formData: FormData) {
     const supabase = await requireAdminSupabase();
 
     const id = String(formData.get("id") ?? "").trim();
-
-    const imageFile = formData.get("image_file");
-    const thumbnailFile = formData.get("thumbnail_file");
-    const uploadedImage =
-      imageFile instanceof File && imageFile.size > 0
-        ? await uploadImage(supabase, "visuals", imageFile, "display")
-        : null;
-    const uploadedThumbnail =
-      thumbnailFile instanceof File && thumbnailFile.size > 0
-        ? await uploadImage(supabase, "visuals", thumbnailFile, "thumbs")
-        : null;
-
-    const imageUrl = uploadedImage || String(formData.get("image_url") ?? "").trim();
-    const thumbnailUrl =
-      uploadedThumbnail || String(formData.get("thumbnail_url") ?? "").trim() || imageUrl || null;
+    const imageUrl = String(formData.get("image_url") ?? "").trim();
+    const thumbnailUrl = String(formData.get("thumbnail_url") ?? "").trim() || imageUrl || null;
 
     const payload = {
       title: String(formData.get("title") ?? "").trim(),
@@ -367,7 +352,7 @@ export async function updateVisualAction(formData: FormData) {
     revalidatePath("/admin/visuals");
     redirect("/admin/visuals?success=updated");
   } catch (error) {
-    if (isRedirectError(error)) {
+    if (isNextRedirect(error)) {
       throw error;
     }
     redirect(`/admin/visuals?error=${encodeURIComponent(getErrorMessage(error))}`);
