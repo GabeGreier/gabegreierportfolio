@@ -50,7 +50,7 @@ async function requireAdminSupabase() {
   const supabase = await createServerSupabaseClient();
 
   if (!supabase) {
-    throw new Error("Supabase is not configured.");
+    redirect("/admin?error=missing-supabase");
   }
 
   const {
@@ -58,7 +58,7 @@ async function requireAdminSupabase() {
   } = await supabase.auth.getUser();
 
   if (!user || !isAdminEmail(user.email)) {
-    throw new Error("Unauthorized");
+    redirect("/admin?error=unauthorized");
   }
 
   return supabase;
@@ -100,6 +100,13 @@ async function uploadImage(
   } = supabase.storage.from(bucket).getPublicUrl(path);
 
   return publicUrl;
+}
+
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return "Unexpected error";
 }
 
 export async function signInAction(formData: FormData) {
@@ -268,85 +275,93 @@ export async function deleteProjectAction(formData: FormData) {
 }
 
 export async function createVisualAction(formData: FormData) {
-  const supabase = await requireAdminSupabase();
+  try {
+    const supabase = await requireAdminSupabase();
 
-  const imageFile = formData.get("image_file");
-  const thumbnailFile = formData.get("thumbnail_file");
-  const uploadedImage =
-    imageFile instanceof File ? await uploadImage(supabase, "visuals", imageFile, "display") : null;
-  const uploadedThumbnail =
-    thumbnailFile instanceof File && thumbnailFile.size > 0
-      ? await uploadImage(supabase, "visuals", thumbnailFile, "thumbs")
-      : null;
+    const imageFile = formData.get("image_file");
+    const thumbnailFile = formData.get("thumbnail_file");
+    const uploadedImage =
+      imageFile instanceof File ? await uploadImage(supabase, "visuals", imageFile, "display") : null;
+    const uploadedThumbnail =
+      thumbnailFile instanceof File && thumbnailFile.size > 0
+        ? await uploadImage(supabase, "visuals", thumbnailFile, "thumbs")
+        : null;
 
-  const imageUrl = uploadedImage || String(formData.get("image_url") ?? "").trim();
-  const thumbnailUrl =
-    uploadedThumbnail || String(formData.get("thumbnail_url") ?? "").trim() || imageUrl || null;
+    const imageUrl = uploadedImage || String(formData.get("image_url") ?? "").trim();
+    const thumbnailUrl =
+      uploadedThumbnail || String(formData.get("thumbnail_url") ?? "").trim() || imageUrl || null;
 
-  const payload = {
-    title: String(formData.get("title") ?? "").trim(),
-    description: String(formData.get("description") ?? "").trim() || null,
-    image_url: imageUrl,
-    thumbnail_url: thumbnailUrl,
-    tags: parseTags(String(formData.get("tags") ?? "")),
-    featured: parseBoolean(formData, "featured"),
-    published: parseBoolean(formData, "published"),
-    shot_date: String(formData.get("shot_date") ?? "").trim() || null
-  };
+    const payload = {
+      title: String(formData.get("title") ?? "").trim(),
+      description: String(formData.get("description") ?? "").trim() || null,
+      image_url: imageUrl,
+      thumbnail_url: thumbnailUrl,
+      tags: parseTags(String(formData.get("tags") ?? "")),
+      featured: parseBoolean(formData, "featured"),
+      published: parseBoolean(formData, "published"),
+      shot_date: String(formData.get("shot_date") ?? "").trim() || null
+    };
 
-  const { error } = await supabase.from("visuals").insert(payload);
+    const { error } = await supabase.from("visuals").insert(payload);
 
-  if (error) {
-    redirect(`/admin/visuals?error=${encodeURIComponent(error.message)}`);
+    if (error) {
+      redirect(`/admin/visuals?error=${encodeURIComponent(error.message)}`);
+    }
+
+    revalidatePath("/");
+    revalidatePath("/visuals");
+    revalidatePath("/admin/visuals");
+    redirect("/admin/visuals?success=created");
+  } catch (error) {
+    redirect(`/admin/visuals?error=${encodeURIComponent(getErrorMessage(error))}`);
   }
-
-  revalidatePath("/");
-  revalidatePath("/visuals");
-  revalidatePath("/admin/visuals");
-  redirect("/admin/visuals?success=created");
 }
 
 export async function updateVisualAction(formData: FormData) {
-  const supabase = await requireAdminSupabase();
+  try {
+    const supabase = await requireAdminSupabase();
 
-  const id = String(formData.get("id") ?? "").trim();
+    const id = String(formData.get("id") ?? "").trim();
 
-  const imageFile = formData.get("image_file");
-  const thumbnailFile = formData.get("thumbnail_file");
-  const uploadedImage =
-    imageFile instanceof File && imageFile.size > 0
-      ? await uploadImage(supabase, "visuals", imageFile, "display")
-      : null;
-  const uploadedThumbnail =
-    thumbnailFile instanceof File && thumbnailFile.size > 0
-      ? await uploadImage(supabase, "visuals", thumbnailFile, "thumbs")
-      : null;
+    const imageFile = formData.get("image_file");
+    const thumbnailFile = formData.get("thumbnail_file");
+    const uploadedImage =
+      imageFile instanceof File && imageFile.size > 0
+        ? await uploadImage(supabase, "visuals", imageFile, "display")
+        : null;
+    const uploadedThumbnail =
+      thumbnailFile instanceof File && thumbnailFile.size > 0
+        ? await uploadImage(supabase, "visuals", thumbnailFile, "thumbs")
+        : null;
 
-  const imageUrl = uploadedImage || String(formData.get("image_url") ?? "").trim();
-  const thumbnailUrl =
-    uploadedThumbnail || String(formData.get("thumbnail_url") ?? "").trim() || imageUrl || null;
+    const imageUrl = uploadedImage || String(formData.get("image_url") ?? "").trim();
+    const thumbnailUrl =
+      uploadedThumbnail || String(formData.get("thumbnail_url") ?? "").trim() || imageUrl || null;
 
-  const payload = {
-    title: String(formData.get("title") ?? "").trim(),
-    description: String(formData.get("description") ?? "").trim() || null,
-    image_url: imageUrl,
-    thumbnail_url: thumbnailUrl,
-    tags: parseTags(String(formData.get("tags") ?? "")),
-    featured: parseBoolean(formData, "featured"),
-    published: parseBoolean(formData, "published"),
-    shot_date: String(formData.get("shot_date") ?? "").trim() || null
-  };
+    const payload = {
+      title: String(formData.get("title") ?? "").trim(),
+      description: String(formData.get("description") ?? "").trim() || null,
+      image_url: imageUrl,
+      thumbnail_url: thumbnailUrl,
+      tags: parseTags(String(formData.get("tags") ?? "")),
+      featured: parseBoolean(formData, "featured"),
+      published: parseBoolean(formData, "published"),
+      shot_date: String(formData.get("shot_date") ?? "").trim() || null
+    };
 
-  const { error } = await supabase.from("visuals").update(payload).eq("id", id);
+    const { error } = await supabase.from("visuals").update(payload).eq("id", id);
 
-  if (error) {
-    redirect(`/admin/visuals?error=${encodeURIComponent(error.message)}`);
+    if (error) {
+      redirect(`/admin/visuals?error=${encodeURIComponent(error.message)}`);
+    }
+
+    revalidatePath("/");
+    revalidatePath("/visuals");
+    revalidatePath("/admin/visuals");
+    redirect("/admin/visuals?success=updated");
+  } catch (error) {
+    redirect(`/admin/visuals?error=${encodeURIComponent(getErrorMessage(error))}`);
   }
-
-  revalidatePath("/");
-  revalidatePath("/visuals");
-  revalidatePath("/admin/visuals");
-  redirect("/admin/visuals?success=updated");
 }
 
 export async function deleteVisualAction(formData: FormData) {
