@@ -40,7 +40,7 @@ export function VisualForm({
           <Input id="thumbnail_url" name="thumbnail_url" type="url" defaultValue={initialValues?.thumbnail_url ?? ""} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="image_file">Upload Display Image (max 8MB)</Label>
+          <Label htmlFor="image_file">Upload Display Image (max 15MB)</Label>
           <Input id="image_file" name="image_file" type="file" accept="image/*" />
         </div>
         <div className="space-y-2">

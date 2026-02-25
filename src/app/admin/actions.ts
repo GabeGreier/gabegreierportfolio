@@ -7,7 +7,7 @@ import { isAdminEmail } from "@/lib/auth";
 import { slugify } from "@/lib/utils";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
-const MAX_UPLOAD_SIZE = 8 * 1024 * 1024;
+const MAX_UPLOAD_SIZE = 15 * 1024 * 1024;
 
 function parseBoolean(formData: FormData, key: string) {
   return formData.get(key) === "on";
@@ -75,10 +75,13 @@ async function uploadImage(
   }
 
   if (file.size > MAX_UPLOAD_SIZE) {
-    throw new Error("Upload exceeds 8MB. Please upload an optimized image.");
+    throw new Error("Upload exceeds 15MB. Please upload an optimized image.");
   }
 
-  if (!file.type.startsWith("image/")) {
+  const hasImageMime = file.type.startsWith("image/");
+  const hasKnownImageExtension = /\.(jpe?g|png|webp|avif|heic|heif)$/i.test(file.name);
+
+  if (!hasImageMime && !hasKnownImageExtension) {
     throw new Error("Only image uploads are allowed.");
   }
 
@@ -88,7 +91,7 @@ async function uploadImage(
   const { error } = await supabase.storage.from(bucket).upload(path, file, {
     cacheControl: "3600",
     upsert: false,
-    contentType: file.type
+    contentType: file.type || undefined
   });
 
   if (error) {

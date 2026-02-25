@@ -85,7 +85,7 @@ psql "$SUPABASE_DB_URL" -f supabase/seed.sql
 ## 6) Image/performance notes
 
 - Uses `next/image` with lazy loading defaults.
-- Admin upload forms enforce image mime types and an 8MB file limit.
+- Admin upload forms enforce image mime types and a 15MB file limit.
 - For best results, upload pre-optimized display and thumbnail assets.
 
 ## Project structure

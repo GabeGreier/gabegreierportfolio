@@ -87,7 +87,7 @@ export function ProjectForm({
           <Input id="cover_image_url" name="cover_image_url" type="url" defaultValue={initialValues?.cover_image_url ?? ""} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="cover_image_file">Or Upload Cover Image (max 8MB)</Label>
+          <Label htmlFor="cover_image_file">Or Upload Cover Image (max 15MB)</Label>
           <Input id="cover_image_file" name="cover_image_file" type="file" accept="image/*" />
         </div>
         <div className="space-y-2 md:col-span-2">

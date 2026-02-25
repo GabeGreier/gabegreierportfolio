@@ -154,8 +154,20 @@ with check (public.is_admin_email());
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values
-  ('visuals', 'visuals', true, 8388608, array['image/jpeg', 'image/png', 'image/webp', 'image/avif']),
-  ('project-images', 'project-images', true, 8388608, array['image/jpeg', 'image/png', 'image/webp', 'image/avif'])
+  (
+    'visuals',
+    'visuals',
+    true,
+    15728640,
+    array['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif', 'image/heic', 'image/heif']
+  ),
+  (
+    'project-images',
+    'project-images',
+    true,
+    15728640,
+    array['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif', 'image/heic', 'image/heif']
+  )
 on conflict (id) do update
 set
   public = excluded.public,
