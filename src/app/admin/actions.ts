@@ -3,6 +3,7 @@
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { isAdminEmail } from "@/lib/auth";
 import { slugify } from "@/lib/utils";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
@@ -316,6 +317,9 @@ export async function createVisualAction(formData: FormData) {
     revalidatePath("/admin/visuals");
     redirect("/admin/visuals?success=created");
   } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
     redirect(`/admin/visuals?error=${encodeURIComponent(getErrorMessage(error))}`);
   }
 }
@@ -363,6 +367,9 @@ export async function updateVisualAction(formData: FormData) {
     revalidatePath("/admin/visuals");
     redirect("/admin/visuals?success=updated");
   } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
     redirect(`/admin/visuals?error=${encodeURIComponent(getErrorMessage(error))}`);
   }
 }
