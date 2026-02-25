@@ -13,6 +13,8 @@ export function VisualForm({
   submitLabel: string;
   initialValues?: Partial<Visual>;
 }) {
+  const tagsValue = Array.isArray(initialValues?.tags) ? initialValues.tags.join(", ") : "";
+
   return (
     <form action={action} className="space-y-6 rounded-xl border border-border/70 bg-card/70 p-6">
       {initialValues?.id ? <Input type="hidden" name="id" defaultValue={initialValues.id} /> : null}
@@ -24,6 +26,10 @@ export function VisualForm({
         <div className="space-y-2 md:col-span-2">
           <Label htmlFor="description">Description</Label>
           <Textarea id="description" name="description" defaultValue={initialValues?.description ?? ""} rows={4} />
+        </div>
+        <div className="space-y-2 md:col-span-2">
+          <Label htmlFor="tags">Tags (comma separated)</Label>
+          <Input id="tags" name="tags" defaultValue={tagsValue} placeholder="Lambo, Night, Rolling" />
         </div>
         <div className="space-y-2">
           <Label htmlFor="image_url">Display Image URL</Label>

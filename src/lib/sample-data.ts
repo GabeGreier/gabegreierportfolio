@@ -122,6 +122,7 @@ export const sampleVisuals: Visual[] = [
       "https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1600&q=80",
     thumbnail_url:
       "https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=640&q=70",
+    tags: ["Lambo", "Night", "Rolling"],
     featured: true,
     published: true,
     shot_date: now,
@@ -136,6 +137,7 @@ export const sampleVisuals: Visual[] = [
       "https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=1600&q=80",
     thumbnail_url:
       "https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=640&q=70",
+    tags: ["Porsche", "Sunset", "Coupe"],
     featured: true,
     published: true,
     shot_date: now,
@@ -150,6 +152,7 @@ export const sampleVisuals: Visual[] = [
       "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1600&q=80",
     thumbnail_url:
       "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=640&q=70",
+    tags: ["Ferrari", "Track", "Action"],
     featured: true,
     published: true,
     shot_date: now,
@@ -164,6 +167,7 @@ export const sampleVisuals: Visual[] = [
       "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1600&q=80",
     thumbnail_url:
       "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=640&q=70",
+    tags: ["Detail", "Studio", "BMW"],
     featured: true,
     published: true,
     shot_date: now,
@@ -178,6 +182,7 @@ export const sampleVisuals: Visual[] = [
       "https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=1600&q=80",
     thumbnail_url:
       "https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=640&q=70",
+    tags: ["Lambo", "Urban", "Night"],
     featured: true,
     published: true,
     shot_date: now,
@@ -192,6 +197,7 @@ export const sampleVisuals: Visual[] = [
       "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1600&q=80",
     thumbnail_url:
       "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=640&q=70",
+    tags: ["Desert", "Wide", "Road"],
     featured: true,
     published: true,
     shot_date: now,
@@ -206,6 +212,7 @@ export const sampleVisuals: Visual[] = [
       "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=80",
     thumbnail_url:
       "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=640&q=70",
+    tags: ["Monochrome", "Panning", "Classic"],
     featured: false,
     published: true,
     shot_date: now,
@@ -220,6 +227,7 @@ export const sampleVisuals: Visual[] = [
       "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1600&q=80",
     thumbnail_url:
       "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=640&q=70",
+    tags: ["Harbor", "Night", "Long Exposure"],
     featured: false,
     published: true,
     shot_date: now,

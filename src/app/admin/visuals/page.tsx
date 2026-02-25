@@ -66,6 +66,11 @@ export default async function AdminVisualsPage({ searchParams }: Props) {
                   <Badge variant={visual.featured ? "default" : "outline"}>
                     {visual.featured ? "Featured" : "Not featured"}
                   </Badge>
+                  {(visual.tags ?? []).map((tag) => (
+                    <Badge key={`${visual.id}-${tag}`} variant="outline">
+                      {tag}
+                    </Badge>
+                  ))}
                   {visual.shot_date ? (
                     <span className="text-xs text-muted-foreground">Shot {formatDate(visual.shot_date)}</span>
                   ) : null}

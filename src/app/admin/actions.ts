@@ -27,6 +27,25 @@ function parseGalleryUrls(value: string) {
     .filter(Boolean);
 }
 
+function parseTags(value: string) {
+  const normalized: string[] = [];
+  const seen = new Set<string>();
+
+  value
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean)
+    .forEach((tag) => {
+      const key = tag.toLowerCase();
+      if (!seen.has(key)) {
+        seen.add(key);
+        normalized.push(tag);
+      }
+    });
+
+  return normalized;
+}
+
 async function requireAdminSupabase() {
   const supabase = await createServerSupabaseClient();
 
@@ -269,6 +288,7 @@ export async function createVisualAction(formData: FormData) {
     description: String(formData.get("description") ?? "").trim() || null,
     image_url: imageUrl,
     thumbnail_url: thumbnailUrl,
+    tags: parseTags(String(formData.get("tags") ?? "")),
     featured: parseBoolean(formData, "featured"),
     published: parseBoolean(formData, "published"),
     shot_date: String(formData.get("shot_date") ?? "").trim() || null
@@ -311,6 +331,7 @@ export async function updateVisualAction(formData: FormData) {
     description: String(formData.get("description") ?? "").trim() || null,
     image_url: imageUrl,
     thumbnail_url: thumbnailUrl,
+    tags: parseTags(String(formData.get("tags") ?? "")),
     featured: parseBoolean(formData, "featured"),
     published: parseBoolean(formData, "published"),
     shot_date: String(formData.get("shot_date") ?? "").trim() || null

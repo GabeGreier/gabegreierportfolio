@@ -64,6 +64,7 @@ create table if not exists public.visuals (
   description text,
   image_url text not null,
   thumbnail_url text,
+  tags text[] not null default '{}',
   featured boolean not null default false,
   published boolean not null default false,
   shot_date date,

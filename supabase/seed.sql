@@ -73,6 +73,7 @@ insert into public.visuals (
   description,
   image_url,
   thumbnail_url,
+  tags,
   featured,
   published,
   shot_date
@@ -83,6 +84,7 @@ values
     'Low-angle cinematic roll shot with deep contrast.',
     'https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1600&q=80',
     'https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=640&q=70',
+    array['Lambo', 'Night', 'Rolling'],
     true,
     true,
     now()::date
@@ -92,6 +94,7 @@ values
     'Warm dusk tones and clean reflections.',
     'https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=1600&q=80',
     'https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=640&q=70',
+    array['Porsche', 'Sunset', 'Coupe'],
     true,
     true,
     now()::date
@@ -101,6 +104,7 @@ values
     'Compressed telephoto perspective with subtle motion blur.',
     'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1600&q=80',
     'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=640&q=70',
+    array['Ferrari', 'Track', 'Action'],
     true,
     true,
     now()::date

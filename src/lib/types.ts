@@ -33,6 +33,7 @@ export type Visual = {
   description: string | null;
   image_url: string;
   thumbnail_url: string | null;
+  tags: string[];
   featured: boolean;
   published: boolean;
   shot_date: string | null;
