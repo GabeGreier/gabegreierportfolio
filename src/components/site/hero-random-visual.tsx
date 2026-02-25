@@ -5,7 +5,7 @@ import Image from "next/image";
 import type { Visual } from "@/lib/types";
 
 export function HeroRandomVisual({ visuals }: { visuals: Visual[] }) {
-  const [selected, setSelected] = useState<Visual | null>(visuals[0] ?? null);
+  const [selected, setSelected] = useState<Visual | null>(null);
 
   useEffect(() => {
     if (visuals.length === 0) {
@@ -13,8 +13,19 @@ export function HeroRandomVisual({ visuals }: { visuals: Visual[] }) {
       return;
     }
 
-    const randomIndex = Math.floor(Math.random() * visuals.length);
-    setSelected(visuals[randomIndex]);
+    if (visuals.length === 1) {
+      setSelected(visuals[0]);
+      return;
+    }
+
+    const previousId = window.sessionStorage.getItem("hero_visual_id");
+    const candidates = visuals.filter((visual) => visual.id !== previousId);
+    const pool = candidates.length > 0 ? candidates : visuals;
+    const randomIndex = Math.floor(Math.random() * pool.length);
+    const nextVisual = pool[randomIndex];
+
+    window.sessionStorage.setItem("hero_visual_id", nextVisual.id);
+    setSelected(nextVisual);
   }, [visuals]);
 
   if (!selected) {
