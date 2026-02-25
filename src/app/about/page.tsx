@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { SectionHeading } from "@/components/site/section-heading";
 
 export const metadata: Metadata = {
-  title: "About",
   description:
     "About Gabriel Greier, a computer engineering student building hardware/software projects and cinematic automotive visuals."
 };

@@ -30,7 +30,7 @@ export function VisualGrid({ visuals, limit }: { visuals: Visual[]; limit?: numb
                 </div>
               </button>
             </DialogTrigger>
-            <DialogContent className="p-0">
+            <DialogContent className="max-w-[92vw] border-0 bg-transparent p-0 shadow-none">
               <DialogTitle className="sr-only">{visual.title}</DialogTitle>
               <div className="relative aspect-[16/10] w-full">
                 <Image src={visual.image_url} alt={visual.title} fill className="object-contain" sizes="95vw" />

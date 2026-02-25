@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { Caveat, Manrope } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
-import { SiteHeader } from "@/components/site/site-header";
-import { SiteFooter } from "@/components/site/site-footer";
+import { SiteChrome } from "@/components/site/site-chrome";
 import { env } from "@/lib/env";
 
 const sans = Manrope({
@@ -11,18 +10,9 @@ const sans = Manrope({
   display: "swap"
 });
 
-const display = Caveat({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap"
-});
-
 export const metadata: Metadata = {
   metadataBase: new URL(env.siteUrl),
-  title: {
-    default: "Gabriel Greier | Engineering + Automotive Visuals",
-    template: "%s | Gabriel Greier"
-  },
+  title: "Gabriel Greier",
   description:
     "Portfolio of Gabriel Greier, a computer engineering builder creating hardware/software projects and cinematic automotive visuals.",
   openGraph: {
@@ -54,13 +44,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${sans.variable} ${display.variable}`}>
+    <html lang="en" className={sans.variable}>
       <body className="font-sans">
-        <div className="relative flex min-h-screen flex-col">
-          <SiteHeader />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
-        </div>
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

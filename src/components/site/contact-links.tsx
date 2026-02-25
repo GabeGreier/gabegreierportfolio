@@ -3,22 +3,22 @@ import { Github, Instagram, Linkedin, Mail } from "lucide-react";
 
 const links = [
   {
-    href: "mailto:gabriel@example.com",
-    label: "gabriel@example.com",
+    href: "mailto:gabegreier@gmail.com",
+    label: "gabegreier@gmail.com",
     icon: Mail
   },
   {
-    href: "https://instagram.com/gabrielgreier",
+    href: "https://www.instagram.com/gabegreiervisuals/",
     label: "Instagram",
     icon: Instagram
   },
   {
-    href: "https://github.com/gabegreier",
+    href: "https://github.com/GabeGreier",
     label: "GitHub",
     icon: Github
   },
   {
-    href: "https://linkedin.com/in/gabrielgreier",
+    href: "https://www.linkedin.com/in/gabrielgreier",
     label: "LinkedIn",
     icon: Linkedin
   }
