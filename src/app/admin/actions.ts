@@ -122,6 +122,17 @@ function isNextRedirect(error: unknown) {
   );
 }
 
+type BulkVisualInput = {
+  title?: unknown;
+  description?: unknown;
+  image_url?: unknown;
+  thumbnail_url?: unknown;
+  tags?: unknown;
+  featured?: unknown;
+  published?: unknown;
+  shot_date?: unknown;
+};
+
 export async function signInAction(formData: FormData) {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "").trim();
@@ -373,4 +384,71 @@ export async function deleteVisualAction(formData: FormData) {
   revalidatePath("/visuals");
   revalidatePath("/admin/visuals");
   redirect("/admin/visuals?success=deleted");
+}
+
+export async function createVisualsBulkAction(formData: FormData) {
+  try {
+    const supabase = await requireAdminSupabase();
+    const rawEntries = String(formData.get("entries") ?? "[]");
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(rawEntries);
+    } catch {
+      redirect("/admin/visuals?error=Invalid%20bulk%20payload");
+    }
+
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      redirect("/admin/visuals?error=No%20visuals%20to%20create");
+    }
+
+    const payload = (parsed as BulkVisualInput[])
+      .slice(0, 100)
+      .map((entry) => {
+        const title = String(entry.title ?? "").trim();
+        const imageUrl = String(entry.image_url ?? "").trim();
+        if (!title || !imageUrl) {
+          return null;
+        }
+
+        const rawTags = Array.isArray(entry.tags)
+          ? entry.tags
+              .map((tag) => String(tag ?? "").trim())
+              .filter(Boolean)
+              .join(",")
+          : String(entry.tags ?? "");
+
+        return {
+          title,
+          description: String(entry.description ?? "").trim() || null,
+          image_url: imageUrl,
+          thumbnail_url: String(entry.thumbnail_url ?? "").trim() || imageUrl,
+          tags: parseTags(rawTags),
+          featured: Boolean(entry.featured),
+          published: Boolean(entry.published),
+          shot_date: String(entry.shot_date ?? "").trim() || null
+        };
+      })
+      .filter((entry): entry is NonNullable<typeof entry> => entry !== null);
+
+    if (payload.length === 0) {
+      redirect("/admin/visuals?error=No%20valid%20visual%20entries");
+    }
+
+    const { error } = await supabase.from("visuals").insert(payload);
+
+    if (error) {
+      redirect(`/admin/visuals?error=${encodeURIComponent(error.message)}`);
+    }
+
+    revalidatePath("/");
+    revalidatePath("/visuals");
+    revalidatePath("/admin/visuals");
+    redirect("/admin/visuals?success=bulk-created");
+  } catch (error) {
+    if (isNextRedirect(error)) {
+      throw error;
+    }
+    redirect(`/admin/visuals?error=${encodeURIComponent(getErrorMessage(error))}`);
+  }
 }

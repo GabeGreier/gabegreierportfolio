@@ -41,7 +41,7 @@ export default async function AdminVisualsPage({ searchParams }: Props) {
         <div className="space-y-1">
           {success ? (
             <p className="rounded-md border border-emerald-300/80 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
-              Visual {success}.
+              {success === "bulk-created" ? "Bulk visuals created." : `Visual ${success}.`}
             </p>
           ) : null}
           {error ? (
