@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { SiteChrome } from "@/components/site/site-chrome";
 import { env } from "@/lib/env";
@@ -47,6 +49,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" className={sans.variable}>
       <body className="font-sans">
         <SiteChrome>{children}</SiteChrome>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
