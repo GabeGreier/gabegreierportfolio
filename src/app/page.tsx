@@ -16,7 +16,7 @@ export default async function HomePage() {
               Gabriel <span className="text-primary">Greier</span>
             </h1>
             <p className="max-w-2xl text-lg text-muted-foreground md:text-xl">
-              Computer Engineering student at the University of Saskatchewan.
+              Computer Engineering student at the University of Saskatchewan and automotive photographer.
             </p>
             <div className="flex flex-wrap gap-3 pt-2">
               <Button asChild size="lg" className="gap-2">
