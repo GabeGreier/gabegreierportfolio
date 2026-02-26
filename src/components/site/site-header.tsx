@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -8,6 +11,8 @@ const links = [
 ];
 
 export function SiteHeader({ className }: { className?: string }) {
+  const pathname = usePathname();
+
   return (
     <header className={cn("sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur", className)}>
       <div className="container flex h-16 items-center justify-between">
@@ -19,7 +24,7 @@ export function SiteHeader({ className }: { className?: string }) {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm text-foreground/80 transition-colors hover:text-foreground"
+              className={cn("nav-link text-sm text-foreground/80", pathname === link.href && "nav-link-active")}
             >
               {link.label}
             </Link>
