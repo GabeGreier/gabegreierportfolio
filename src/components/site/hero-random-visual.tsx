@@ -34,13 +34,13 @@ export function HeroRandomVisual({ visuals }: { visuals: Visual[] }) {
 
   return (
     <div className="mx-auto w-full max-w-[440px]">
-      <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden border border-border/70 bg-card/70">
+      <div className="group relative flex aspect-[4/5] items-center justify-center overflow-hidden border border-border/70 bg-card/70">
         <Image
           src={selected.thumbnail_url ?? selected.image_url}
           alt={selected.title}
           fill
           sizes="(max-width: 1024px) 70vw, 440px"
-          className="object-contain"
+          className="object-contain transition-transform duration-500 ease-out group-hover:scale-[1.03]"
           priority
         />
       </div>
