@@ -5,19 +5,27 @@ import type { Project, ProjectImage, Visual } from "@/lib/types";
 
 export const getPublicProjects = cache(async (): Promise<Project[]> => {
   const supabase = await createServerSupabaseClient();
+  const sortProjects = (projects: Project[]) =>
+    projects.sort((a, b) => {
+      if (a.featured !== b.featured) {
+        return Number(b.featured) - Number(a.featured);
+      }
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    });
 
   if (!supabase) {
-    return sampleProjects.filter((project) => project.published);
+    return sortProjects(sampleProjects.filter((project) => project.published));
   }
 
   const { data, error } = await supabase
     .from("projects")
     .select("*")
     .eq("published", true)
+    .order("featured", { ascending: false })
     .order("created_at", { ascending: false });
 
   if (error || !data) {
-    return sampleProjects.filter((project) => project.published);
+    return sortProjects(sampleProjects.filter((project) => project.published));
   }
 
   return data as Project[];
@@ -71,19 +79,27 @@ export const getProjectImages = cache(async (projectId: string): Promise<Project
 
 export const getPublicVisuals = cache(async (): Promise<Visual[]> => {
   const supabase = await createServerSupabaseClient();
+  const sortVisuals = (visuals: Visual[]) =>
+    visuals.sort((a, b) => {
+      if (a.featured !== b.featured) {
+        return Number(b.featured) - Number(a.featured);
+      }
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    });
 
   if (!supabase) {
-    return sampleVisuals.filter((visual) => visual.published);
+    return sortVisuals(sampleVisuals.filter((visual) => visual.published));
   }
 
   const { data, error } = await supabase
     .from("visuals")
     .select("*")
     .eq("published", true)
+    .order("featured", { ascending: false })
     .order("created_at", { ascending: false });
 
   if (error || !data) {
-    return sampleVisuals.filter((visual) => visual.published);
+    return sortVisuals(sampleVisuals.filter((visual) => visual.published));
   }
 
   return data as Visual[];
