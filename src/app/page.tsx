@@ -8,14 +8,14 @@ export default async function HomePage() {
   const visuals = await getPublicVisuals();
 
   return (
-    <section className="container flex min-h-[calc(100svh-4rem)] items-center py-0">
+    <section className="container flex min-h-[calc(100svh-4rem)] items-center py-6 md:py-8">
       <div className="w-full">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px]">
           <div className="max-w-4xl animate-fade-up space-y-6">
             <h1 className="text-5xl font-semibold leading-tight tracking-tight md:text-7xl">
               Gabriel <span className="text-primary">Greier</span>
             </h1>
-            <p className="max-w-2xl text-lg text-muted-foreground md:text-xl">
+            <p className="max-w-[560px] text-lg text-muted-foreground md:text-xl">
               Computer Engineering student at the University of Saskatchewan. I build hardware + software systems and shoot cars.
             </p>
             <p className="text-sm text-muted-foreground/90">
