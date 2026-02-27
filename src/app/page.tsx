@@ -16,12 +16,15 @@ export default async function HomePage() {
               Gabriel <span className="text-primary">Greier</span>
             </h1>
             <p className="max-w-2xl text-lg text-muted-foreground md:text-xl">
-              Computer Engineering student at the University of Saskatchewan and automotive photographer.
+              Computer Engineering student at the University of Saskatchewan. I build hardware + software systems and shoot cars.
+            </p>
+            <p className="text-sm text-muted-foreground/90">
+              Saskatoon, SK - Open to internships - Available for photo shoots
             </p>
             <div className="flex flex-wrap gap-3 pt-2">
               <Button asChild size="lg" className="gap-2">
                 <Link href="/projects">
-                  View Projects
+                  See my work
                   <Cpu className="size-4" />
                 </Link>
               </Button>
@@ -32,11 +35,11 @@ export default async function HomePage() {
                 className="gap-2 border-primary/35 text-primary hover:bg-primary/10"
               >
                 <Link href="/visuals">
-                  View Visuals
+                  View my visuals
                   <Camera className="size-4" />
                 </Link>
               </Button>
-              <Button asChild variant="ghost" size="lg">
+              <Button asChild variant="link" size="lg" className="px-0 font-semibold underline decoration-primary/70 underline-offset-4">
                 <Link href="/contact">Contact</Link>
               </Button>
             </div>

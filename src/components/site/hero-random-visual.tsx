@@ -4,6 +4,18 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import type { Visual } from "@/lib/types";
 
+function formatShotDate(value: string | null) {
+  if (!value) {
+    return "Unknown date";
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  }).format(new Date(value));
+}
+
 export function HeroRandomVisual({ visuals }: { visuals: Visual[] }) {
   const [selected, setSelected] = useState<Visual | null>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -69,6 +81,7 @@ export function HeroRandomVisual({ visuals }: { visuals: Visual[] }) {
           }}
         />
       </div>
+      <p className="mt-2 text-center text-xs text-muted-foreground">Shot by me - {formatShotDate(selected.shot_date)}</p>
     </div>
   );
 }
