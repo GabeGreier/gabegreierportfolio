@@ -1,10 +1,11 @@
 import { createServerClient, type SetAllCookies } from "@supabase/ssr";
+import type { User } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
 import { env, hasSupabaseEnv } from "@/lib/env";
 
 export async function updateSession(request: NextRequest) {
   if (!hasSupabaseEnv) {
-    return NextResponse.next({ request });
+    return { response: NextResponse.next({ request }), user: null as User | null };
   }
 
   const response = NextResponse.next({ request });
@@ -22,7 +23,9 @@ export async function updateSession(request: NextRequest) {
     }
   });
 
-  await supabase.auth.getUser();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
 
-  return response;
+  return { response, user };
 }
