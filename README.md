@@ -14,7 +14,8 @@ Next.js + Supabase app currently being adapted toward a dealership photo-to-list
 - Public pages: `/`, `/projects`, `/projects/[slug]`, `/visuals`, `/about`, `/contact`
 - Auth pages: `/login`, `/admin`
 - Protected app pages (MVP bootstrap): `/dashboard`, `/vehicles/*`, `/admin/dealers`
-- Middleware session refresh + protected route redirects
+- Middleware session refresh + auth/role/dealer route guards
+- First-login profile bootstrap (`profiles` row auto-created when missing)
 - Projects CRUD with publish/feature controls
 - Visuals CRUD with upload-to-storage flow and publish/feature controls
 - Subtle paper-tone premium visual system (off-white base, charcoal text, orange accent)
@@ -35,25 +36,29 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
 SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
+SUPABASE_DB_URL=postgresql://postgres:<PASSWORD>@db.<PROJECT-REF>.supabase.co:5432/postgres
 ADMIN_EMAILS=gabriel@example.com
 ```
 
-`ADMIN_EMAILS` is a comma-separated allowlist used by server route protection.
+`ADMIN_EMAILS` is a comma-separated allowlist used by portfolio admin route protection.
+`SUPABASE_SERVICE_ROLE_KEY` is used server-side only for profile bootstrap and upcoming tokenized upload flows.
 
 ## 2) Supabase setup
 
 1. Create a Supabase project.
-2. Run migration SQL in `supabase/migrations/20260224170000_init_portfolio.sql`.
-3. Optional: run `supabase/seed.sql` for starter placeholder entries.
+2. Run all migration SQL in `supabase/migrations/`.
+3. Optional: run `supabase/seed.sql` for starter placeholder entries (portfolio + dealership demo rows).
 4. In `public.admin_emails`, replace `your-email@example.com` with your real admin email.
 5. In Supabase Auth, create user(s) for your admin email(s) and set passwords.
 
 If using Supabase CLI:
 
 ```bash
-supabase db push
-psql "$SUPABASE_DB_URL" -f supabase/seed.sql
+npx supabase db reset
+psql "$SUPABASE_DB_URL" -f supabase/verify_read_isolation.sql
 ```
+
+`supabase db reset` requires Docker Desktop running locally.
 
 ## 3) Security model
 
@@ -63,6 +68,7 @@ psql "$SUPABASE_DB_URL" -f supabase/seed.sql
 - Write access is restricted to emails in `public.admin_emails` via `public.is_admin_email()`.
 - Storage policies restrict upload/update/delete to admin users.
 - No service-role key is used client-side.
+- Portal route access is enforced by both middleware and server-side guards.
 
 ## 4) Deployment to Vercel
 

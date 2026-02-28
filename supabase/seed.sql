@@ -108,5 +108,193 @@ values
     true,
     true,
     now()::date
-  )
+)
 on conflict do nothing;
+
+-- Task 2 seed data for dealership portal MVP
+insert into public.dealers (id, name, slug)
+values
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Demo Auto Group', 'demo-auto-group'),
+  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'Northside Motors', 'northside-motors')
+on conflict (id) do update
+set
+  name = excluded.name,
+  slug = excluded.slug;
+
+insert into public.profiles (id, dealer_id, role, display_name)
+values
+  ('00000000-0000-0000-0000-000000000001', null, 'SUPER_ADMIN', 'Platform Owner'),
+  ('00000000-0000-0000-0000-000000000002', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'DEALER_MANAGER', 'Demo Manager'),
+  ('00000000-0000-0000-0000-000000000003', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'DEALER_STAFF', 'Demo Staff'),
+  ('00000000-0000-0000-0000-000000000004', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'DEALER_MANAGER', 'Northside Manager')
+on conflict (id) do update
+set
+  dealer_id = excluded.dealer_id,
+  role = excluded.role,
+  display_name = excluded.display_name;
+
+insert into public.checklist_templates (id, dealer_id, name)
+values
+  ('cccccccc-cccc-cccc-cccc-ccccccccccc1', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Standard'),
+  ('cccccccc-cccc-cccc-cccc-ccccccccccc2', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'Standard')
+on conflict (id) do update
+set
+  dealer_id = excluded.dealer_id,
+  name = excluded.name;
+
+insert into public.vehicles (
+  id,
+  dealer_id,
+  stock_number,
+  vin,
+  year,
+  make,
+  model,
+  trim,
+  mileage_km,
+  price_cad,
+  color,
+  notes,
+  status,
+  created_by
+)
+values
+  (
+    'dddddddd-dddd-dddd-dddd-dddddddddd01',
+    'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+    'DAG-1001',
+    '1HGBH41JXMN109186',
+    2021,
+    'Toyota',
+    'RAV4',
+    'XLE',
+    45600,
+    33995,
+    'Silver',
+    'Fresh detail complete.',
+    'NEW',
+    '00000000-0000-0000-0000-000000000002'
+  ),
+  (
+    'dddddddd-dddd-dddd-dddd-dddddddddd02',
+    'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
+    'NSM-2002',
+    '2FTRX18L1XCA01234',
+    2019,
+    'Ford',
+    'F-150',
+    'XLT',
+    81200,
+    31995,
+    'Blue',
+    'Needs fresh front grille shot.',
+    'PHOTOS_IN',
+    '00000000-0000-0000-0000-000000000004'
+  )
+on conflict (id) do update
+set
+  dealer_id = excluded.dealer_id,
+  stock_number = excluded.stock_number,
+  vin = excluded.vin,
+  year = excluded.year,
+  make = excluded.make,
+  model = excluded.model,
+  trim = excluded.trim,
+  mileage_km = excluded.mileage_km,
+  price_cad = excluded.price_cad,
+  color = excluded.color,
+  notes = excluded.notes,
+  status = excluded.status,
+  created_by = excluded.created_by;
+
+insert into public.checklist_items (
+  id,
+  dealer_id,
+  vehicle_id,
+  label,
+  key,
+  state,
+  notes,
+  updated_by
+)
+values
+  (
+    'eeeeeeee-eeee-eeee-eeee-eeeeeeeeee01',
+    'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+    'dddddddd-dddd-dddd-dddd-dddddddddd01',
+    'Front 3/4',
+    'front_3_4',
+    'missing',
+    null,
+    '00000000-0000-0000-0000-000000000002'
+  ),
+  (
+    'eeeeeeee-eeee-eeee-eeee-eeeeeeeeee02',
+    'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+    'dddddddd-dddd-dddd-dddd-dddddddddd01',
+    'Odometer',
+    'odometer',
+    'missing',
+    null,
+    '00000000-0000-0000-0000-000000000002'
+  ),
+  (
+    'eeeeeeee-eeee-eeee-eeee-eeeeeeeeee03',
+    'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
+    'dddddddd-dddd-dddd-dddd-dddddddddd02',
+    'Driver side',
+    'driver_side',
+    'retake',
+    'Retake with less glare.',
+    '00000000-0000-0000-0000-000000000004'
+)
+on conflict (id) do update
+set
+  dealer_id = excluded.dealer_id,
+  vehicle_id = excluded.vehicle_id,
+  label = excluded.label,
+  key = excluded.key,
+  state = excluded.state,
+  notes = excluded.notes,
+  updated_by = excluded.updated_by;
+
+insert into public.photos (
+  id,
+  dealer_id,
+  vehicle_id,
+  storage_path,
+  original_filename,
+  label,
+  sort_index,
+  uploaded_by
+)
+values
+  (
+    'ffffffff-ffff-ffff-ffff-fffffffffff1',
+    'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+    'dddddddd-dddd-dddd-dddd-dddddddddd01',
+    'dealers/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa/vehicles/dddddddd-dddd-dddd-dddd-dddddddddd01/ffffffff-ffff-ffff-ffff-fffffffffff1.jpg',
+    'rav4-front.jpg',
+    'front_3_4',
+    1,
+    '00000000-0000-0000-0000-000000000003'
+  ),
+  (
+    'ffffffff-ffff-ffff-ffff-fffffffffff2',
+    'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
+    'dddddddd-dddd-dddd-dddd-dddddddddd02',
+    'dealers/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/vehicles/dddddddd-dddd-dddd-dddd-dddddddddd02/ffffffff-ffff-ffff-ffff-fffffffffff2.jpg',
+    'f150-driver-side.jpg',
+    'driver_side',
+    1,
+    '00000000-0000-0000-0000-000000000004'
+  )
+on conflict (id) do update
+set
+  dealer_id = excluded.dealer_id,
+  vehicle_id = excluded.vehicle_id,
+  storage_path = excluded.storage_path,
+  original_filename = excluded.original_filename,
+  label = excluded.label,
+  sort_index = excluded.sort_index,
+  uploaded_by = excluded.uploaded_by;
