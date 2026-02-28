@@ -1,7 +1,6 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { ensureProfileForUser } from "@/lib/portal-auth";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 function normalizeNextPath(value: string | null) {
@@ -31,28 +30,5 @@ export async function signInAction(formData: FormData) {
     redirect(`/login?error=invalid-credentials&next=${encodeURIComponent(nextPath)}`);
   }
 
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
-
-  if (user) {
-    try {
-      const profile = await ensureProfileForUser(user);
-      if (!profile) {
-        redirect(`/login?error=profile-setup&next=${encodeURIComponent(nextPath)}`);
-      }
-    } catch {
-      redirect(`/login?error=profile-setup&next=${encodeURIComponent(nextPath)}`);
-    }
-  }
-
   redirect(nextPath);
-}
-
-export async function signOutAction() {
-  const supabase = await createServerSupabaseClient();
-  if (supabase) {
-    await supabase.auth.signOut();
-  }
-  redirect("/login");
 }

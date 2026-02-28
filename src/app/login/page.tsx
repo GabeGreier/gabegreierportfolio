@@ -25,10 +25,6 @@ function errorLabel(error: string | undefined) {
       return "Invalid email or password.";
     case "missing-supabase":
       return "Supabase environment variables are missing.";
-    case "profile-setup":
-      return "Your account signed in, but profile setup failed. Contact support.";
-    case "profile-missing":
-      return "Profile not found for this account.";
     default:
       return null;
   }
