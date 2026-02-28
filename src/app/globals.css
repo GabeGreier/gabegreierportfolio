@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 :root {
-  --font-sans: "Segoe UI", "Avenir Next", "Helvetica Neue", "Arial", sans-serif;
   --background: 34 45% 97%;
   --foreground: 27 18% 13%;
   --card: 36 40% 98%;

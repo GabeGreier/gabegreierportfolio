@@ -1,6 +1,6 @@
 # Gabriel Greier Portfolio
 
-Next.js + Supabase app currently being adapted toward a dealership photo-to-listing workflow portal MVP.
+Production-ready Next.js portfolio that unifies engineering/software case studies and cinematic automotive photography in one brand.
 
 ## Stack
 
@@ -12,9 +12,8 @@ Next.js + Supabase app currently being adapted toward a dealership photo-to-list
 ## Features
 
 - Public pages: `/`, `/projects`, `/projects/[slug]`, `/visuals`, `/about`, `/contact`
-- Auth pages: `/login`, `/admin`
-- Protected app pages (MVP bootstrap): `/dashboard`, `/vehicles/*`, `/admin/dealers`
-- Middleware session refresh + protected route redirects
+- Admin pages: `/admin`, `/admin/dashboard`, `/admin/projects`, `/admin/visuals`
+- Server-side admin route protection (`requireAdmin` checks auth and email allowlist)
 - Projects CRUD with publish/feature controls
 - Visuals CRUD with upload-to-storage flow and publish/feature controls
 - Subtle paper-tone premium visual system (off-white base, charcoal text, orange accent)
@@ -34,7 +33,6 @@ Required `.env.local` values:
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
-SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
 ADMIN_EMAILS=gabriel@example.com
 ```
 
