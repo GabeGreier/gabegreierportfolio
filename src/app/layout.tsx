@@ -14,16 +14,32 @@ const sans = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.siteUrl),
-  title: "Gabriel Greier",
+  title: {
+    default: "Gabriel Greier | Computer Engineering Portfolio",
+    template: "%s | Gabriel Greier"
+  },
   description:
     "Portfolio of Gabriel Greier, a computer engineering builder creating hardware/software projects and cinematic automotive visuals.",
+  keywords: [
+    "Gabriel Greier",
+    "computer engineering portfolio",
+    "software projects",
+    "hardware projects",
+    "automotive photography",
+    "Saskatoon developer"
+  ],
+  authors: [{ name: "Gabriel Greier" }],
+  creator: "Gabriel Greier",
+  publisher: "Gabriel Greier",
+  category: "Technology",
   openGraph: {
-    title: "Gabriel Greier Portfolio",
+    title: "Gabriel Greier | Computer Engineering Portfolio",
     description:
       "Computer engineering projects and cinematic automotive photography in one cohesive portfolio.",
     type: "website",
     url: "/",
     siteName: "Gabriel Greier",
+    locale: "en_CA",
     images: [
       {
         url: "/og-image.svg",
@@ -35,9 +51,20 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gabriel Greier Portfolio",
+    title: "Gabriel Greier | Computer Engineering Portfolio",
     description: "Engineering projects and cinematic automotive visuals.",
     images: ["/og-image.svg"]
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1
+    }
   },
   alternates: {
     canonical: "/"

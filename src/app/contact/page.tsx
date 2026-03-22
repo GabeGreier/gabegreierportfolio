@@ -3,7 +3,17 @@ import { ContactLinks } from "@/components/site/contact-links";
 import { SectionHeading } from "@/components/site/section-heading";
 
 export const metadata: Metadata = {
-  description: "Contact Gabriel Greier for software engineering and automotive visual work."
+  title: "Contact",
+  description: "Contact Gabriel Greier for software engineering and automotive visual work.",
+  alternates: {
+    canonical: "/contact"
+  },
+  openGraph: {
+    title: "Contact | Gabriel Greier",
+    description: "Contact Gabriel Greier for software engineering and automotive visual work.",
+    url: "/contact",
+    images: ["/og-image.svg"]
+  }
 };
 
 export default function ContactPage() {

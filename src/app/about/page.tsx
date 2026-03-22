@@ -2,8 +2,19 @@ import type { Metadata } from "next";
 import { SectionHeading } from "@/components/site/section-heading";
 
 export const metadata: Metadata = {
+  title: "About",
   description:
-    "About Gabriel Greier, a computer engineering student building hardware/software projects and cinematic automotive visuals."
+    "About Gabriel Greier, a computer engineering student building hardware/software projects and cinematic automotive visuals.",
+  alternates: {
+    canonical: "/about"
+  },
+  openGraph: {
+    title: "About | Gabriel Greier",
+    description:
+      "About Gabriel Greier, a computer engineering student building hardware/software projects and cinematic automotive visuals.",
+    url: "/about",
+    images: ["/og-image.svg"]
+  }
 };
 
 export default function AboutPage() {

@@ -22,7 +22,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: project.title,
     description: project.short_description,
+    keywords: project.tools_stack,
+    alternates: {
+      canonical: `/projects/${project.slug}`
+    },
     openGraph: {
+      title: project.title,
+      description: project.short_description,
+      url: `/projects/${project.slug}`,
+      type: "article",
+      images: [project.cover_image_url]
+    },
+    twitter: {
+      card: "summary_large_image",
       title: project.title,
       description: project.short_description,
       images: [project.cover_image_url]
@@ -39,9 +51,21 @@ export default async function ProjectDetailPage({ params }: Props) {
   }
 
   const images = await getProjectImages(project.id);
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    description: project.short_description,
+    datePublished: project.created_at,
+    dateModified: project.updated_at,
+    image: [project.cover_image_url, ...images.map((image) => image.image_url)],
+    keywords: project.tools_stack,
+    about: "Computer engineering project"
+  };
 
   return (
     <article className="container space-y-10 py-16">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <div className="space-y-4">
         <Badge>Case Study</Badge>
         <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">{project.title}</h1>
@@ -67,7 +91,15 @@ export default async function ProjectDetailPage({ params }: Props) {
       </div>
 
       <div className="relative h-[45vh] min-h-[280px] overflow-hidden rounded-xl border border-border/80">
-        <Image src={project.cover_image_url} alt={project.title} fill sizes="100vw" className="object-cover" priority />
+        <Image
+          src={project.cover_image_url}
+          alt={project.title}
+          fill
+          sizes="100vw"
+          className="object-cover"
+          priority
+          quality={100}
+        />
       </div>
 
       <section className="grid gap-6 md:grid-cols-2">
@@ -109,7 +141,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           <div className="grid gap-4 sm:grid-cols-2">
             {images.map((image) => (
               <div key={image.id} className="relative aspect-[4/3] overflow-hidden rounded-lg border border-border/70">
-                <Image src={image.image_url} alt={image.alt_text} fill sizes="50vw" className="object-cover" />
+                <Image src={image.image_url} alt={image.alt_text} fill sizes="50vw" className="object-cover" quality={100} />
               </div>
             ))}
           </div>

@@ -69,10 +69,12 @@ export function HeroRandomVisual({ visuals }: { visuals: Visual[] }) {
           alt={selected.title}
           fill
           sizes="(max-width: 1024px) 70vw, 440px"
+          quality={100}
           className={`object-contain transition-transform duration-500 ease-out group-hover:scale-[1.03] ${
             isVisible ? "hero-image-enter-active" : "hero-image-enter"
           }`}
           priority
+          fetchPriority="high"
         />
         <div
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"

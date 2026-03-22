@@ -45,6 +45,8 @@ export function VisualGrid({ visuals, limit }: { visuals: Visual[]; limit?: numb
               alt={visual.title}
               fill
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+              quality={100}
+              priority={index < 2}
               className="object-contain transition-transform duration-500 group-hover:scale-[1.02]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
@@ -61,7 +63,14 @@ export function VisualGrid({ visuals, limit }: { visuals: Visual[]; limit?: numb
             <DialogTitle className="sr-only">{activeVisual.title}</DialogTitle>
             <div className="relative mx-auto w-full max-w-6xl">
               <div className="relative aspect-[16/10] w-full overflow-hidden border border-white/20 bg-black/55">
-                <Image src={activeVisual.image_url} alt={activeVisual.title} fill className="object-contain" sizes="95vw" />
+                <Image
+                  src={activeVisual.image_url}
+                  alt={activeVisual.title}
+                  fill
+                  className="object-contain"
+                  sizes="95vw"
+                  quality={100}
+                />
 
                 {items.length > 1 ? (
                   <>
@@ -108,6 +117,7 @@ export function VisualGrid({ visuals, limit }: { visuals: Visual[]; limit?: numb
                           alt={visual.title}
                           fill
                           sizes="96px"
+                          quality={100}
                           className="object-cover"
                         />
                       </button>

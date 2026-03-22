@@ -5,9 +5,26 @@ import { SectionHeading } from "@/components/site/section-heading";
 import { VisualGrid } from "@/components/site/visual-grid";
 import { Button } from "@/components/ui/button";
 import { getPublicVisuals } from "@/lib/content";
+import { env } from "@/lib/env";
 
 export const metadata: Metadata = {
-  description: "Cinematic automotive photography by Gabriel Greier."
+  title: "Visuals",
+  description: "Cinematic automotive photography by Gabriel Greier.",
+  alternates: {
+    canonical: "/visuals"
+  },
+  openGraph: {
+    title: "Visuals | Gabriel Greier",
+    description: "Cinematic automotive photography by Gabriel Greier.",
+    url: "/visuals",
+    images: ["/og-image.svg"]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Visuals | Gabriel Greier",
+    description: "Cinematic automotive photography by Gabriel Greier.",
+    images: ["/og-image.svg"]
+  }
 };
 
 type Props = {
@@ -22,6 +39,19 @@ export default async function VisualsPage({ searchParams }: Props) {
   const visuals = await getPublicVisuals();
   const params = await searchParams;
   const selectedTag = getSingleValue(params.tag)?.trim() ?? "";
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Visuals",
+    url: `${env.siteUrl}/visuals`,
+    numberOfItems: visuals.length,
+    hasPart: visuals.slice(0, 40).map((visual) => ({
+      "@type": "ImageObject",
+      name: visual.title,
+      description: visual.description ?? undefined,
+      contentUrl: visual.image_url
+    }))
+  };
 
   const tags = Array.from(
     new Map(
@@ -36,51 +66,54 @@ export default async function VisualsPage({ searchParams }: Props) {
     : visuals;
 
   return (
-    <section className="container space-y-10 py-16">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <SectionHeading eyebrow="Automotive Photography" title="Visuals" />
-        <Button asChild variant="outline" className="border-primary/35 text-primary hover:bg-primary/10">
-          <Link href="https://www.instagram.com/gabegreiervisuals/" target="_blank" rel="noreferrer">
-            View Instagram
-          </Link>
-        </Button>
-      </div>
-
-      {tags.length > 0 ? (
-        <div className="flex flex-wrap gap-2">
-          <Button
-            asChild
-            size="sm"
-            variant={selectedTag ? "outline" : "default"}
-            className={selectedTag ? "border-primary/35 text-primary hover:bg-primary/10" : ""}
-          >
-            <Link href="/visuals">All</Link>
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <section className="container space-y-10 py-16">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <SectionHeading eyebrow="Automotive Photography" title="Visuals" />
+          <Button asChild variant="outline" className="border-primary/35 text-primary hover:bg-primary/10">
+            <Link href="https://www.instagram.com/gabegreiervisuals/" target="_blank" rel="noreferrer">
+              View Instagram
+            </Link>
           </Button>
-          {tags.map((tag) => {
-            const isActive = tag.toLowerCase() === selectedTag.toLowerCase();
-            return (
-              <Button
-                key={tag}
-                asChild
-                size="sm"
-                variant={isActive ? "default" : "outline"}
-                className={isActive ? "" : "border-primary/35 text-primary hover:bg-primary/10"}
-              >
-                <Link href={`/visuals?tag=${encodeURIComponent(tag)}`}>{tag}</Link>
-              </Button>
-            );
-          })}
         </div>
-      ) : null}
 
-      {filteredVisuals.length === 0 ? (
-        <EmptyState
-          title={selectedTag ? `No visuals found for "${selectedTag}"` : "No visuals published yet"}
-          description={selectedTag ? "Try a different tag or view all visuals." : "Published visuals will appear here."}
-        />
-      ) : (
-        <VisualGrid visuals={filteredVisuals} />
-      )}
-    </section>
+        {tags.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            <Button
+              asChild
+              size="sm"
+              variant={selectedTag ? "outline" : "default"}
+              className={selectedTag ? "border-primary/35 text-primary hover:bg-primary/10" : ""}
+            >
+              <Link href="/visuals">All</Link>
+            </Button>
+            {tags.map((tag) => {
+              const isActive = tag.toLowerCase() === selectedTag.toLowerCase();
+              return (
+                <Button
+                  key={tag}
+                  asChild
+                  size="sm"
+                  variant={isActive ? "default" : "outline"}
+                  className={isActive ? "" : "border-primary/35 text-primary hover:bg-primary/10"}
+                >
+                  <Link href={`/visuals?tag=${encodeURIComponent(tag)}`}>{tag}</Link>
+                </Button>
+              );
+            })}
+          </div>
+        ) : null}
+
+        {filteredVisuals.length === 0 ? (
+          <EmptyState
+            title={selectedTag ? `No visuals found for "${selectedTag}"` : "No visuals published yet"}
+            description={selectedTag ? "Try a different tag or view all visuals." : "Published visuals will appear here."}
+          />
+        ) : (
+          <VisualGrid visuals={filteredVisuals} />
+        )}
+      </section>
+    </>
   );
 }
