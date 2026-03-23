@@ -1,4 +1,4 @@
-import { noStore } from "next/cache";
+import { unstable_noStore as noStore } from "next/cache";
 import { ImageResponse } from "next/og";
 import { getPublicVisuals } from "@/lib/content";
 
