@@ -14,6 +14,21 @@ try {
 const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "www.gabrielgreier.ca"
+          }
+        ],
+        destination: "https://gabrielgreier.ca/:path*",
+        permanent: true
+      }
+    ];
+  },
   experimental: {
     serverActions: {
       // Keep action payload limit above the storage cap to account for multipart overhead.
