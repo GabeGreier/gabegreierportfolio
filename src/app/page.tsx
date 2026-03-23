@@ -1,16 +1,23 @@
 import Link from "next/link";
 import { Camera, Cpu } from "lucide-react";
+import type { Metadata } from "next";
 import { HeroRandomVisual } from "@/components/site/hero-random-visual";
 import { Button } from "@/components/ui/button";
 import { getPublicVisuals } from "@/lib/content";
 import { env } from "@/lib/env";
 
-const structuredData = {
+export const metadata: Metadata = {
+  title: "Gabriel Greier | Automotive Photography and Computer Engineering",
+  description: "Gabriel Greier: automotive photography and computer engineering projects."
+};
+
+const personStructuredData = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Gabriel Greier",
   url: env.siteUrl,
-  jobTitle: "Computer Engineering Student",
+  description: "Automotive photography and computer engineering by Gabriel Greier.",
+  jobTitle: "Computer Engineering Student and Automotive Photographer",
   knowsAbout: ["Computer Engineering", "Software Development", "Automotive Photography"],
   sameAs: [
     "https://github.com/GabeGreier",
@@ -19,12 +26,21 @@ const structuredData = {
   ]
 };
 
+const websiteStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Gabriel Greier Automotive Photography and Computer Engineering",
+  alternateName: "Gabriel Greier",
+  url: env.siteUrl
+};
+
 export default async function HomePage() {
   const visuals = await getPublicVisuals();
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personStructuredData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteStructuredData) }} />
       <section className="container flex min-h-[calc(100svh-4rem)] items-center py-6 md:py-8">
         <div className="w-full">
           <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px]">
