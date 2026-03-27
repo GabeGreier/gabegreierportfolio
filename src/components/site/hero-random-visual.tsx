@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { shouldBypassImageOptimization } from "@/lib/image-optimization";
 import type { Visual } from "@/lib/types";
 
 function formatShotDate(value: string | null) {
@@ -69,7 +70,8 @@ export function HeroRandomVisual({ visuals }: { visuals: Visual[] }) {
           alt={selected.title}
           fill
           sizes="(max-width: 1024px) 70vw, 440px"
-          quality={100}
+          quality={75}
+          unoptimized={shouldBypassImageOptimization(selected.thumbnail_url ?? selected.image_url)}
           className={`object-contain transition-transform duration-500 ease-out group-hover:scale-[1.03] ${
             isVisible ? "hero-image-enter-active" : "hero-image-enter"
           }`}

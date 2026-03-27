@@ -36,9 +36,11 @@ const nextConfig: NextConfig = {
     }
   },
   images: {
+    unoptimized: true,
     remotePatterns: Array.from(imageHostnames).map((hostname) => ({
       protocol: "https",
-      hostname
+      hostname,
+      pathname: "/**"
     }))
   }
 };

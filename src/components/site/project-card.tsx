@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { shouldBypassImageOptimization } from "@/lib/image-optimization";
 import type { Project } from "@/lib/types";
 
 export function ProjectCard({ project }: { project: Project }) {
@@ -15,7 +16,8 @@ export function ProjectCard({ project }: { project: Project }) {
             alt={project.title}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
-            quality={100}
+            quality={75}
+            unoptimized={shouldBypassImageOptimization(project.cover_image_url)}
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>

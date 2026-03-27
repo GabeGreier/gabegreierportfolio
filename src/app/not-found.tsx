@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ArrowLeft, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getPublicVisuals } from "@/lib/content";
+import { shouldBypassImageOptimization } from "@/lib/image-optimization";
 
 export default async function NotFound() {
   const visuals = await getPublicVisuals();
@@ -42,7 +43,8 @@ export default async function NotFound() {
                 alt={randomVisual?.title ?? "Random visual"}
                 fill
                 sizes="(max-width: 768px) 100vw, 380px"
-                quality={100}
+                quality={75}
+                unoptimized={shouldBypassImageOptimization(visualUrl)}
                 className="object-cover"
                 priority
               />

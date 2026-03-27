@@ -6,6 +6,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getProjectBySlug, getProjectImages } from "@/lib/content";
+import { shouldBypassImageOptimization } from "@/lib/image-optimization";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -98,7 +99,8 @@ export default async function ProjectDetailPage({ params }: Props) {
           sizes="100vw"
           className="object-cover"
           priority
-          quality={100}
+          quality={75}
+          unoptimized={shouldBypassImageOptimization(project.cover_image_url)}
         />
       </div>
 
@@ -141,7 +143,15 @@ export default async function ProjectDetailPage({ params }: Props) {
           <div className="grid gap-4 sm:grid-cols-2">
             {images.map((image) => (
               <div key={image.id} className="relative aspect-[4/3] overflow-hidden rounded-lg border border-border/70">
-                <Image src={image.image_url} alt={image.alt_text} fill sizes="50vw" className="object-cover" quality={100} />
+                <Image
+                  src={image.image_url}
+                  alt={image.alt_text}
+                  fill
+                  sizes="50vw"
+                  className="object-cover"
+                  quality={75}
+                  unoptimized={shouldBypassImageOptimization(image.image_url)}
+                />
               </div>
             ))}
           </div>

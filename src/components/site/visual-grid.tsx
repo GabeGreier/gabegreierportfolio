@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { shouldBypassImageOptimization } from "@/lib/image-optimization";
 import type { Visual } from "@/lib/types";
 
 export function VisualGrid({ visuals, limit }: { visuals: Visual[]; limit?: number }) {
@@ -45,7 +46,8 @@ export function VisualGrid({ visuals, limit }: { visuals: Visual[]; limit?: numb
               alt={visual.title}
               fill
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-              quality={100}
+              quality={75}
+              unoptimized={shouldBypassImageOptimization(visual.thumbnail_url ?? visual.image_url)}
               priority={index < 2}
               className="object-contain transition-transform duration-500 group-hover:scale-[1.02]"
             />
@@ -69,7 +71,8 @@ export function VisualGrid({ visuals, limit }: { visuals: Visual[]; limit?: numb
                   fill
                   className="object-contain"
                   sizes="95vw"
-                  quality={100}
+                  quality={75}
+                  unoptimized={shouldBypassImageOptimization(activeVisual.image_url)}
                 />
 
                 {items.length > 1 ? (
@@ -117,7 +120,8 @@ export function VisualGrid({ visuals, limit }: { visuals: Visual[]; limit?: numb
                           alt={visual.title}
                           fill
                           sizes="96px"
-                          quality={100}
+                          quality={60}
+                          unoptimized={shouldBypassImageOptimization(visual.thumbnail_url ?? visual.image_url)}
                           className="object-cover"
                         />
                       </button>
